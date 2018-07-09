@@ -1,0 +1,101 @@
+package a1;
+
+import java.io.*;
+import java.net.*;
+
+public class Client {
+
+	DatagramPacket sendPacket, receivePacket;
+	DatagramSocket sendSocket, receiveSocket;
+
+	public Client() {
+		try {
+			sendSocket = new DatagramSocket();
+			receiveSocket = new DatagramSocket(1050);
+		} catch (SocketException se) {
+			se.printStackTrace();
+			System.exit(1);
+		}
+	}
+
+	public void sendAndReceive() {
+
+		String random = randomString(20);
+		System.out.println("Client: sending a packet containing:\n" + random);
+		
+		byte msg[] = random.getBytes();
+
+		// send to proxy
+		try {
+	         sendPacket = new DatagramPacket(msg, msg.length,
+	                                         InetAddress.getLocalHost(), 5000);
+	    } catch (UnknownHostException e) {
+	    	e.printStackTrace();
+	        System.exit(1);
+	    }
+		
+		System.out.println("Client: Sending packet:");
+        System.out.println("To host: " + sendPacket.getAddress());
+        System.out.println("Destination host port: " + sendPacket.getPort());
+        int len = sendPacket.getLength();
+        System.out.println("Length: " + len);
+        System.out.print("Containing: ");
+        System.out.println(new String(sendPacket.getData(),0,len));
+		
+		try {
+			sendSocket.send(sendPacket);
+		} catch (IOException e) {
+	        e.printStackTrace();
+	        System.exit(1);
+        }
+		
+		System.out.println("Client: Packet sent.\n");
+
+		// receive from proxy
+		byte data[] = new byte[100];
+        receivePacket = new DatagramPacket(data, data.length);
+        
+        try {
+            // Block until a datagram is received via sendReceiveSocket.  
+            receiveSocket.receive(receivePacket);
+        } catch(IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        
+        // Process the received datagram.
+        System.out.println("Client: Packet received:");
+        System.out.println("From host: " + receivePacket.getAddress());
+        System.out.println("Host port: " + receivePacket.getPort());
+        len = receivePacket.getLength();
+        System.out.println("Length: " + len);
+        System.out.print("Containing: ");
+
+        // Form a String from the byte array.
+        String received = new String(data,0,len);   
+        System.out.println(received);
+
+		// close
+		sendSocket.close();
+		receiveSocket.close();
+	}
+	
+	private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	
+	public static String randomString(int length) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			builder.append(ALPHABET.charAt((int)Math.random()*ALPHABET.length()));
+		}
+		return builder.toString();
+	}
+
+	public static void main(String args[]) {
+		System.out.println(randomString(20));
+		System.out.println((int)Math.random()*20);
+		//for (int i = 0; i < 100; i++) {
+			//Client c = new Client();
+			//c.sendAndReceive();
+		//}
+	}
+}

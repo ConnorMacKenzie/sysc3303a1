@@ -1,0 +1,51 @@
+package a1;
+
+import java.io.*;
+import java.net.*;
+
+public class Proxy {
+
+	DatagramPacket sendPacket, receivePacket1, receivePacket2;
+	DatagramSocket sendSocket, receiveSocket;
+
+	public Proxy() {
+		try {
+			sendSocket = new DatagramSocket();
+			receiveSocket = new DatagramSocket(1050);
+		} catch (SocketException se) {
+			se.printStackTrace();
+			System.exit(1);
+		}
+	}
+
+	public void sendAndReceive() {
+
+		// receive from client
+
+		// print packet information
+
+		// send w/load-balancing
+		// create random number
+		// if 1: send to server 1
+		// if 2: send to server 2
+
+		// print packet information
+
+		// receive from a server
+
+		// print packet information
+
+		// send to client
+
+		// close
+		sendSocket.close();
+		receiveSocket.close();
+	}
+
+	public static void main(String args[]) {
+		for (int i = 0; i < 100; i++) {
+			Proxy p = new Proxy();
+			p.sendAndReceive();
+		}
+	}
+}

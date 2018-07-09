@@ -1,0 +1,41 @@
+package a1;
+
+import java.io.*;
+import java.net.*;
+import java.util.Random;
+
+public class Client {
+
+	DatagramPacket sendPacket, receivePacket;
+	DatagramSocket sendSocket, receiveSocket;
+
+	public Client() {
+		try {
+			sendSocket = new DatagramSocket();
+			receiveSocket = new DatagramSocket(1050);
+		} catch (SocketException se) {
+			se.printStackTrace();
+			System.exit(1);
+		}
+	}
+
+	public void sendAndReceive() {
+
+		String random = RandomStringGenerator.randomAlphanumeric(20).toUpperCase()
+
+		// send to proxy
+
+		// receive from proxy
+
+		// close
+		sendSocket.close();
+		receiveSocket.close();
+	}
+
+	public static void main(String args[]) {
+		for (int i = 0; i < 100; i++) {
+			Client c = new Client();
+			c.sendAndReceive();
+		}
+	}
+}
